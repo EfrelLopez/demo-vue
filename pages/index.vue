@@ -8,16 +8,24 @@
               type="card, actions"
           >
           </v-skeleton-loader>  
+          <v-spacer/>
       </v-sheet>
 
       <dir-carousel-product :items="items" v-else-if="items"></dir-carousel-product>
 
+      <v-sheet v-if="!recommended">
+          <v-skeleton-loader
+              :v-bind="attrs"
+              type="list-item-avatar-three-line, actions"
+          >
+          </v-skeleton-loader>  
+      </v-sheet>
+
       <dir-card-recommended 
-        v-for="recom of recommended"
-        :key="recom.id"
-        :name="recom.nombre"
-        :description="recom.descripcion"
-        :imagen="recom.imagen"
+        v-else
+        :name="recommended.nombre"
+        :description="recommended.descripcion"
+        :imagen="recommended.imagen"
       >
       </dir-card-recommended>
       
@@ -63,35 +71,28 @@ export default {
       },
     }
   },
-  // async created(){
-  //   try {
-  //     const res = await axios.get('https://aeb3tdj22j.execute-api.us-east-2.amazonaws.com/Prod/get-categories/')
-  //     this.items = res.data.categorias
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
   async mounted(){
     try {
       const res = await axios.get('https://aeb3tdj22j.execute-api.us-east-2.amazonaws.com/Prod/get-categories/')
       this.items = res.data.categorias
+      this.recommended = this.items[1]
     } catch (error) {
       console.log(error);
     }
   },
   created(){
-    this.getRecommended()
+    // this.getRecommended()
   },
   methods:{
-    async getRecommended(){
-      try {
-        const res = await axios.get('https://aeb3tdj22j.execute-api.us-east-2.amazonaws.com/Prod/get-categories/')
-        this.recommended = res.data.categorias[1]
-        console.log(this.recommended);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    // async getRecommended(){
+    //   try {
+    //     const res = await axios.get('https://aeb3tdj22j.execute-api.us-east-2.amazonaws.com/Prod/get-categories/')
+    //     this.recommended = res.data.categorias[1]
+    //     console.log(res.data.categorias[1]);
+    //   } catch (error) {   
+    //     console.log(error);
+    //   }
+    // }
   }
     
 }
